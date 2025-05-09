@@ -5,6 +5,8 @@ import CaretDown from "../svg/CaretDown";
 import CustomSelect from "./CustomSelect";
 
 import { useAuthContext } from "../context/AuthContext";
+import CaretLeft from "../svg/CaretLeft";
+import CaretRight from "../svg/CaretRight";
 
 export default function Transactions () {
 
@@ -16,55 +18,62 @@ export default function Transactions () {
     const [sortBy, setSortBy] = React.useState(optionsArrSort[0])
     const [category, setCategory] = React.useState(optionsArrCategory[0])
     const [search, setSearch] = React.useState("")
+    const [selectedPage, setSelectedPage] = React.useState(1)
+
 
     const handleSearch = (e) => {
         setSearch(e.target.value)
+        setSelectedPage(1)
     }
 
    
+    let transactions = auth.userData.transactions
+        
 
+    //handle Search
+    if(search){
+        transactions = transactions.filter(transaction => transaction.name.toLowerCase().includes(search.toLowerCase()))
+    }
+
+    //handle SortBy
+    switch(sortBy){
+        case "Latest":
+            transactions.sort((transactionA, transactionB) => new Date(transactionB.date) - new Date(transactionA.date))
+            break;
+        case "Oldest":
+            transactions.sort((transactionA, transactionB) => new Date(transactionA.date) - new Date(transactionB.date))
+            break;
+        case "A to Z":
+            transactions.sort((transactionA, transactionB) => transactionA.name.localeCompare(transactionB.name))
+            break;
+        case "Z to A":
+            transactions.sort((transactionA, transactionB) => transactionB.name.localeCompare(transactionA.name))
+            break;
+        case "Highest":
+            transactions.sort((transactionA, transactionB) => transactionB.amount - transactionA.amount)
+            break;
+        case "Lowest":
+            transactions.sort((transactionA, transactionB) => transactionA.amount - transactionB.amount)
+            break;
+        default:
+            console.log("error no matching sort found")
+    }
+
+    //handle Category
+    if(category !== "All transactions"){
+        transactions = transactions.filter(transaction => transaction.category === category)
+    }
+
+ 
     const handleTransactionsDisplay = () => {
 
-        let transactions = auth.userData.transactions
-        
-
-        //handle Search
-        if(search){
-            transactions = transactions.filter(transaction => transaction.name.toLowerCase().includes(search.toLowerCase()))
-        }
-
-        //handle SortBy
-        switch(sortBy){
-            case "Latest":
-                transactions.sort((transactionA, transactionB) => new Date(transactionB.date) - new Date(transactionA.date))
-                break;
-            case "Oldest":
-                transactions.sort((transactionA, transactionB) => new Date(transactionA.date) - new Date(transactionB.date))
-                break;
-            case "A to Z":
-                transactions.sort((transactionA, transactionB) => transactionA.name.localeCompare(transactionB.name))
-                break;
-            case "Z to A":
-                transactions.sort((transactionA, transactionB) => transactionB.name.localeCompare(transactionA.name))
-                break;
-            case "Highest":
-                transactions.sort((transactionA, transactionB) => transactionB.amount - transactionA.amount)
-                break;
-            case "Lowest":
-                transactions.sort((transactionA, transactionB) => transactionA.amount - transactionB.amount)
-                break;
-            default:
-                console.log("error no matching sort found")
-        }
-
-        //handle Category
-        if(category !== "All transactions"){
-            transactions = transactions.filter(transaction => transaction.category === category)
-        }
-        
+        const transactionsToDisplay = transactions.slice((selectedPage-1)*10, selectedPage*10)
         const transactionList = []
 
-        for(let transaction of transactions){
+        for(let transaction of transactionsToDisplay){
+
+        
+         
 
             const amountStyle = {color: transaction.amount>0?"var(--green)":"var(--grey-900)"} 
             const amountPrefix = transaction.amount>0? "+$":"-$"
@@ -94,6 +103,47 @@ export default function Transactions () {
         )
     }
 
+
+    //handle footer display
+
+    const handleFooterDisplay = () => {
+
+        const numberOfTransactionsBtn = Math.ceil(transactions.length/10)
+
+        const transactionsPageBtn = []
+        if(numberOfTransactionsBtn>1){
+            for (let i = 1; i <= numberOfTransactionsBtn;i++){
+                transactionsPageBtn.push(
+                    <p 
+                    onClick={() => setSelectedPage(i)}
+                    className={`transactions-page-btn text-preset-4 ${selectedPage===i? "selected-transactions-page":""}`}
+                    >{i}</p>
+                )
+            }
+        }
+
+        return(
+            <div id="transactions-footer">
+                <div className="change-page-btn text-preset-4" 
+                onClick={() => setSelectedPage(prevCount => prevCount>1? prevCount-1:prevCount)}
+                >
+                    <CaretLeft/>
+                    <p>Prev</p>
+                </div>
+                <div className="page-btns">
+                    {transactionsPageBtn}
+                </div>
+                <div 
+                className="change-page-btn text-preset-4"
+                onClick={() => setSelectedPage(prevCount => prevCount<numberOfTransactionsBtn? prevCount+1:prevCount)}
+                >
+                    <p>Next</p>
+                    <CaretRight/>
+                </div>
+            </div>
+        )
+    }
+
     return(
         <div className="page-container">
             <div id="transactions">
@@ -114,11 +164,26 @@ export default function Transactions () {
                         <div id="transactions-sorts">
                             <div className="sort-container">
                                 <p className="text-preset-4">Sort by</p>
-                                <CustomSelect optionsArr={optionsArrSort} setSortValue={setSortBy} sortValue={sortBy} id="sort"/>
+                                <CustomSelect 
+                                optionsArr={optionsArrSort} 
+                                setSortValue={setSortBy} 
+                                sortValue={sortBy} 
+                                setSelectedPage={setSelectedPage}
+                                id="sort"
+                                key="sort"
+                                
+                                />
                             </div>
                             <div className="sort-container">  
                                 <p className="text-preset-4">Category</p>
-                                <CustomSelect optionsArr={optionsArrCategory} setSortValue={setCategory} sortValue={category} id="category"/>
+                                <CustomSelect 
+                                optionsArr={optionsArrCategory} 
+                                setSortValue={setCategory} 
+                                sortValue={category}
+                                setSelectedPage={setSelectedPage} 
+                                id="category"
+                                key="category"
+                                />
                             </div>
                         </div>
                     </div>
@@ -131,8 +196,7 @@ export default function Transactions () {
                         </div>
                         {handleTransactionsDisplay()}
                     </div>
-                    <div id="transactions-footer">
-                    </div>
+                    {handleFooterDisplay()}
                 </div>
             </div>
         </div>

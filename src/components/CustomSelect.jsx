@@ -2,7 +2,7 @@ import React from "react";
 
 import CaretDown from "../svg/CaretDown";
 
-export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue }) {
+export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue, setSelectedPage }) {
 
     const [isSelectHidden, setIsSelectHidden] = React.useState(true)
     const selectRef = React.useRef(null)
@@ -15,6 +15,7 @@ export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue
         const selectedValue = e.currentTarget.innerText
     
         setSortValue(selectedValue)
+        setSelectedPage(1)
     }
 
     const handleOptionsDisplay = () => {
@@ -57,7 +58,6 @@ export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue
         ref={selectRef}
         >
             <div className="select-btn"
-            
             >
                 <p>{sortValue}</p>
                 <CaretDown/>

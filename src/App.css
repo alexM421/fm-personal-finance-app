@@ -624,3 +624,68 @@ a{
   max-width: 200px;
 }
 
+/*Transactions-footer*/
+
+#transactions-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.change-page-btn{
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid var(--beige-500);
+  gap: 16px;
+  color: var(--grey-900);
+  transition: color ease 0.3s, background-color ease 0.3s;
+  height: 40px;
+}
+
+.change-page-btn > svg{
+  color: var(--beige-500);
+  transition: color ease 0.3s;
+}
+
+.change-page-btn:hover{
+  cursor: pointer;
+  background-color: var(--beige-500);
+  color: white;
+}
+
+.change-page-btn:hover > svg{
+
+  color: white;
+}
+
+.page-btns{
+  display: flex;
+  gap: 8px;
+}
+
+.transactions-page-btn{
+  width: 40px;
+  height: 40px;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  border: 1px solid var(--beige-500);
+  color: var(--grey-900);
+  transition: color ease 0.3s, background-color ease 0.3s;
+}
+
+
+.transactions-page-btn:hover{
+  cursor: pointer;
+  background-color: var(--beige-500);
+  color: white;
+}
+
+.selected-transactions-page{
+  color: var(--white);
+  background-color: var(--grey-900);
+}
