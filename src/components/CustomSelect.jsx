@@ -1,8 +1,10 @@
 import React from "react";
 
+import parse from "html-react-parser"
+
 import CaretDown from "../svg/CaretDown";
 
-export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue, setSelectedPage }) {
+export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue }) {
 
     const [isSelectHidden, setIsSelectHidden] = React.useState(true)
     const selectRef = React.useRef(null)
@@ -12,10 +14,8 @@ export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue
     }
 
     const handleOptionClick = (e) => {
-        const selectedValue = e.currentTarget.innerText
-    
+        const selectedValue = parse(e.currentTarget.innerHTML)
         setSortValue(selectedValue)
-        setSelectedPage(1)
     }
 
     const handleOptionsDisplay = () => {
@@ -24,10 +24,10 @@ export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue
         for( let option of optionsArr){
             toReturnArr.push(
                 <div className="option-container">
-                    <p 
-                    className={sortValue===option? "current-selected-text":"" }
+                    <div 
+                    className={`option-content ${sortValue===option? "current-selected-text":""}`}
                     onClick={handleOptionClick}
-                    >{option}</p>
+                    >{option}</div>
                     <hr/>
                 </div>
             )
@@ -59,7 +59,7 @@ export default function CustomSelect ( { optionsArr, id, setSortValue, sortValue
         >
             <div className="select-btn"
             >
-                <p>{sortValue}</p>
+                <div>{sortValue}</div>
                 <CaretDown/>
             </div>
             <div className={`custom-select-options ${isSelectHidden? "":"show-options"}`}>

@@ -5,12 +5,12 @@ import CustomSelect from "./CustomSelect";
 
 import { useAuthContext } from "../context/AuthContext"
 
-export default function EditWindow ( { setDisplayEditWindow, originalName, originalTarget, originalTheme, index } ) {
+export default function EditWindow ( { setDisplayAddPotWindow } ) {
 
     const { auth, setAuth } = useAuthContext()
 
-    const [potName, setPotName] = React.useState(originalName)
-    const [target,setTarget] = React.useState(originalTarget)
+    const [potName, setPotName] = React.useState("")
+    const [target,setTarget] = React.useState("")
 
     const colorArr =[
         {colorName: "Green", colorHex: "#277C78"},
@@ -32,7 +32,6 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
 
 
     //search for the originalTheme associated color index
-    const originalThemeIndex = colorArr.findIndex(color => color.colorHex === originalTheme)
 
     const themeArr = []
 
@@ -54,8 +53,9 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
         )
     }
 
-
-    const [theme, setTheme] = React.useState(themeArr[originalThemeIndex])
+    const [theme, setTheme] = React.useState(themeArr[0])
+    console.log(themeArr)
+    console.log(theme)
 
     //change rgb to hex 
 
@@ -72,7 +72,7 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
 
     //is rgb need to convert into hex
     const backgroundStyle = rgbToHex(theme.props.children[0].props.style.backgroundColor)
-    
+
 
     const handlePotNameChange= (e) => {
         setPotName(e.target.value)
@@ -82,7 +82,7 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
         setTarget(e.target.value)
     }
     
-
+    console.log(backgroundStyle)
   
 
     const handleSave = (e) => {
@@ -90,12 +90,12 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
         
         setAuth(prevAuth => {
             const updatedPots = [...prevAuth.userData.pots]
-            updatedPots[index] = {
-                ...updatedPots[index],
+            updatedPots.push({
                 name: potName,
                 target: target,
                 theme: backgroundStyle,
-            }
+                total: 0,
+            })
 
             return(
                 {
@@ -108,16 +108,16 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
             )
         })
 
-        setDisplayEditWindow(false)
+        setDisplayAddPotWindow(false)
     }    
 
     return(
         <form className="popup-window" onSubmit={handleSave} noValidate>
             <div className="popup-window-header">
-                <h1 className="text-preset-1">Edit Plot</h1>
-                <CloseModal onClick={() => setDisplayEditWindow(false)}/>
+                <h1 className="text-preset-1">Add New Plot</h1>
+                <CloseModal onClick={() => setDisplayAddPotWindow(false)}/>
             </div>
-            <p className="popup-window-desc text-preset-4">If your saving targets change, feel free to update your pots.</p>
+            <p className="popup-window-desc text-preset-4">Create a pot to set savings targets. These can help keep you on track as you save for special purchases.</p>
             <div className="popup-window-inputs-div text-preset-4">
                 <div className="popup-window-input-div">
                     <label>Pot name</label>
@@ -158,7 +158,7 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
                     />
                 </div>
             </div>
-            <button className="popup-window-submit-btn" type="submit">Save Changes</button>
+            <button className="popup-window-submit-btn" type="submit">Add Pot</button>
         </form>
     )
 }

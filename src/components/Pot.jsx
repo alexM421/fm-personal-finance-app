@@ -1,11 +1,14 @@
 import React from "react";
+import { createPortal } from "react-dom"
 import Ellipsis from "../svg/Ellipsis";
+import EditWindow from "./EditWindow";
+import DeletePot from "./DeletePot";
 
-export default function Pot ( { pot }) {
+export default function Pot ( { pot, index }) {
 
     const [displayOptions, setDisplayOptions] = React.useState(false)
     const [displayEditWindow, setDisplayEditWindow] = React.useState(false)
-
+    const [displayDeleteWindow, setDisplayDeleteWindow] = React.useState(false)
 
     const modifyBtnRef = React.useRef(null)
 
@@ -25,6 +28,7 @@ export default function Pot ( { pot }) {
     },[])
 
 
+
     return(
         <div className="pot">
             <div className="pot-header">
@@ -38,7 +42,7 @@ export default function Pot ( { pot }) {
                     >
                         <p onClick={() => setDisplayEditWindow(true)}>Edit Pot</p>
                         <hr/>
-                        <p>Delete Pot</p>
+                        <p onClick={() => setDisplayDeleteWindow(true)}>Delete Pot</p>
                     </div>
                 </div>
             </div>
@@ -61,6 +65,18 @@ export default function Pot ( { pot }) {
                 <button className="pot-btn text-preset-4-bold">+ Add Money</button>
                 <button className="pot-btn text-preset-4-bold">Withdraw</button>
             </div>
+            {displayEditWindow && createPortal(
+                <div>
+                    <div className="backdrop"></div>
+                    <EditWindow index={index} setDisplayEditWindow={setDisplayEditWindow} originalName={pot.name} originalTarget={pot.target} originalTheme={pot.theme}/>
+                </div>
+            ,document.body)}
+            {displayDeleteWindow && createPortal(
+                <div>
+                    <div className="backdrop"></div>
+                    <DeletePot index={index} setDisplayDeleteWindow={setDisplayDeleteWindow} potName={pot.name}/>
+                </div>
+            ,document.body)}
         </div>
     )
 }

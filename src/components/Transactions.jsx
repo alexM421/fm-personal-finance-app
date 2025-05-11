@@ -23,9 +23,11 @@ export default function Transactions () {
 
     const handleSearch = (e) => {
         setSearch(e.target.value)
-        setSelectedPage(1)
     }
 
+    React.useEffect(() => {
+        setSelectedPage(1)
+    },[search, category,sortBy])
    
     let transactions = auth.userData.transactions
         
