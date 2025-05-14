@@ -297,7 +297,7 @@ body{
   font-weight: bold;
 }
 
-.error-input{
+input.error-input, .error-input, div.error-input{
   border-color: var(--red);
 }
 
@@ -421,17 +421,17 @@ a{
   flex: 1;
 }
 
-#transactions{
+.transactions{
   display: flex;
   flex-direction: column;
   gap: 32px;
 }
 
-#transactions > h1{
+.transactions > h1{
   color: var(--grey-900);
 }
 
-#transactions-container{
+.transactions-container{
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -441,13 +441,13 @@ a{
   border-radius: 12px;
 }
 
-#transactions-header{
+.transactions-header{
   display: flex;
   gap: 24px;
   justify-content: space-between;
 }
 
-#transactions-searchbar-container{
+.transactions-searchbar-container{
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -571,13 +571,13 @@ a{
 
 /*Transactions-table*/
 
-#transactions-table{
+.transactions-table{
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
-#transactions-list{
+.transactions-list{
   display: flex;
   flex-direction: column;
 
@@ -598,7 +598,7 @@ a{
   color: var(--grey-500);
 }
 
-#transactions-table-header{
+.transactions-table-header{
   padding: 12px 16px;
   border-bottom: 1px solid var(--grey-100);
 }
@@ -896,6 +896,7 @@ a{
 .popup-window-header{
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: var(--grey-900);
 }
 
@@ -933,10 +934,23 @@ a{
   color: var(--grey-900);
 }
 
+.letters-tracker{
+  margin-left: auto;
+}
 
 .popup-window-input:focus{
   outline: none;
 }
+
+.popup-window-input-div > .error-text, .popup-window-subtext > .error-text{
+  margin-left: 0;
+}
+
+.popup-window-subtext{
+  display: flex;
+  justify-content: space-between;
+}
+
 
 .popup-window-input-dollar-container{
   padding: 12px 20px;
@@ -1049,4 +1063,168 @@ a{
 .cancel-delete-pot-btn:hover{
   cursor: pointer;
   color :var(--grey-900);
+}
+
+/*Withdraw */
+
+.withdraw-filler-container{
+  display: flex;
+}
+
+.withdraw-bar-filler-old{
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  height: 8px;
+}
+
+.withdraw-bar-filler-gap{
+  height: 8px;
+}
+
+.withdraw-bar-filler-new{
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  height: 8px;
+}
+
+/*Recurring bills*/
+
+.recurring-bills{
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+}
+
+.recurring-bills-container{
+  display: flex;
+  gap: 24px;
+}
+
+.recurring-bills-info-container{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  flex: 3;
+}
+
+.recurring-bills-total-container{
+  background-color: var(--grey-900);
+  padding: 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  color: white;
+}
+
+.recurring-bills-total{
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+.recurring-bills-summary-container{
+  color: var(--grey-900);
+  padding: 20px;
+  border-radius: 12px;
+  background-color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recurring-bills-summary{
+  display: flex;
+  flex-direction: column;
+}
+
+.recurring-bills-summary > hr{
+  opacity: 0.15;
+  margin-block: 16px;
+  border: none;
+  border-top: 1px solid #696868;
+}
+
+.recurring-bills-summary-element{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.recurring-bills-summary-element>p:first-of-type{
+  color: var(--grey-500);
+}
+
+.recurring-bills-summary-element>p:last-of-type{
+  color: var(--grey-900);
+}
+
+.recurring-bills-summary-element.due-soon > p{
+  color: var(--red);
+}
+
+.recurring-bills-transactions{
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  flex: 7;
+  border-radius: 12px;
+  background-color: var(--white);
+  gap: 24px;
+}
+
+.transactions-header{
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+}
+
+.transactions-searchbar-container{
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 320px;
+  border: 1px solid var(--beige-500);
+  padding-right: 12px;
+}
+
+.transactions-searchbar{
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+}
+
+.transactions-searchbar:focus{
+  outline: none;
+}
+
+.transactions-sorts{
+  display: flex;
+  gap: 24px;
+}
+
+
+.sort-container{
+  color: var(--grey-500);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.due-date>svg{
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.due-date{
+  position: relative;
+}
+
+.due-date > p{
+  color: var(--green);
 }

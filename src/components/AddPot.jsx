@@ -33,30 +33,35 @@ export default function EditWindow ( { setDisplayAddPotWindow } ) {
 
     //search for the originalTheme associated color index
 
-    const themeArr = []
+    const themeArr =  React.useMemo(() => {
 
-    for(let color of colorArr){
+        const arr = []
 
-        let isColorAlreadyUsed = false
+        for(let color of colorArr){
 
-        for(let pot of auth.userData.pots){
-            if(pot.theme===color.colorHex){
-                isColorAlreadyUsed = true
+            let isColorAlreadyUsed = false
+
+            for(let pot of auth.userData.pots){
+                if(pot.theme===color.colorHex){
+                    isColorAlreadyUsed = true
+                }
             }
+
+            arr.push(
+                <div className={`option-content ${isColorAlreadyUsed? "already-used":""}`}>
+                    <div className="circle" style={{backgroundColor: color.colorHex}}></div>
+                    <p>{color.colorName}</p>
+                    {isColorAlreadyUsed? <p className="text-preset-5">Already used</p>:""}
+                </div>
+            )
         }
-        themeArr.push(
-            <div className={`option-content ${isColorAlreadyUsed? "already-used":""}`}>
-                <div className="circle" style={{backgroundColor: color.colorHex}}></div>
-                <p>{color.colorName}</p>
-                {isColorAlreadyUsed? <p className="text-preset-5">Already used</p>:""}
-            </div>
-        )
-    }
+        
+        return arr
+
+    },[auth.userData.pots])   
 
     const [theme, setTheme] = React.useState(themeArr[0])
-    console.log(themeArr)
-    console.log(theme)
-
+    
     //change rgb to hex 
 
     function rgbToHex(rgb) {
@@ -71,7 +76,7 @@ export default function EditWindow ( { setDisplayAddPotWindow } ) {
     }
 
     //is rgb need to convert into hex
-    const backgroundStyle = rgbToHex(theme.props.children[0].props.style.backgroundColor)
+    const backgroundStyle = rgbToHex(theme.props.children[0].props.style.backgroundColor) || theme.props.children[0].props.style.backgroundColor
 
 
     const handlePotNameChange= (e) => {
@@ -81,9 +86,7 @@ export default function EditWindow ( { setDisplayAddPotWindow } ) {
     const handleTargetChange = (e) => {
         setTarget(e.target.value)
     }
-    
-    console.log(backgroundStyle)
-  
+      
 
     const handleSave = (e) => {
         e.preventDefault()

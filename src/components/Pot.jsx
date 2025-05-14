@@ -3,12 +3,16 @@ import { createPortal } from "react-dom"
 import Ellipsis from "../svg/Ellipsis";
 import EditWindow from "./EditWindow";
 import DeletePot from "./DeletePot";
+import Withdraw from "./Withdraw";
+import AddMoney from "./AddMoney";
 
 export default function Pot ( { pot, index }) {
 
     const [displayOptions, setDisplayOptions] = React.useState(false)
     const [displayEditWindow, setDisplayEditWindow] = React.useState(false)
     const [displayDeleteWindow, setDisplayDeleteWindow] = React.useState(false)
+    const [displayWithdraw, setDisplayWithdraw] = React.useState(false)
+    const [displayAddMoney, setDisplayAddMoney] = React.useState(false)
 
     const modifyBtnRef = React.useRef(null)
 
@@ -62,8 +66,8 @@ export default function Pot ( { pot, index }) {
                 </div>
             </div>
             <div className="pot-inputs">
-                <button className="pot-btn text-preset-4-bold">+ Add Money</button>
-                <button className="pot-btn text-preset-4-bold">Withdraw</button>
+                <button className="pot-btn text-preset-4-bold" onClick={() => setDisplayAddMoney(true)}>+ Add Money</button>
+                <button className="pot-btn text-preset-4-bold" onClick={() => setDisplayWithdraw(true)}>Withdraw</button>
             </div>
             {displayEditWindow && createPortal(
                 <div>
@@ -75,6 +79,18 @@ export default function Pot ( { pot, index }) {
                 <div>
                     <div className="backdrop"></div>
                     <DeletePot index={index} setDisplayDeleteWindow={setDisplayDeleteWindow} potName={pot.name}/>
+                </div>
+            ,document.body)}
+            {displayWithdraw && createPortal(
+                <div>
+                    <div className="backdrop"></div>
+                    <Withdraw index={index} name={pot.name} target={pot.target} total={pot.total} setDisplayWithdraw={setDisplayWithdraw}/>
+                </div>
+            ,document.body)}
+             {displayAddMoney && createPortal(
+                <div>
+                    <div className="backdrop"></div>
+                    <AddMoney index={index} name={pot.name} target={pot.target} total={pot.total} setDisplayAddMoney={setDisplayAddMoney}/>
                 </div>
             ,document.body)}
         </div>

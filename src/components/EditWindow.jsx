@@ -11,6 +11,11 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
 
     const [potName, setPotName] = React.useState(originalName)
     const [target,setTarget] = React.useState(originalTarget)
+    const [errors, setErrors] = React.useState({
+        errorName: false,
+        errorTarget: false,
+    })
+
 
     const colorArr =[
         {colorName: "Green", colorHex: "#277C78"},
@@ -57,6 +62,9 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
 
     const [theme, setTheme] = React.useState(themeArr[originalThemeIndex])
 
+    
+    console.log(theme)
+
     //change rgb to hex 
 
     function rgbToHex(rgb) {
@@ -71,7 +79,7 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
     }
 
     //is rgb need to convert into hex
-    const backgroundStyle = rgbToHex(theme.props.children[0].props.style.backgroundColor)
+    const backgroundStyle = rgbToHex(theme.props.children[0].props.style.backgroundColor) || theme.props.children[0].props.style.backgroundColor
     
 
     const handlePotNameChange= (e) => {
@@ -88,28 +96,44 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
     const handleSave = (e) => {
         e.preventDefault()
         
-        setAuth(prevAuth => {
-            const updatedPots = [...prevAuth.userData.pots]
-            updatedPots[index] = {
-                ...updatedPots[index],
-                name: potName,
-                target: target,
-                theme: backgroundStyle,
-            }
+        const nameInput = e.target.elements[0]
+        const targetInput = e.target.elements[1]
+    
+        const tempErrors = {}
 
-            return(
-                {
-                    ...prevAuth,
-                    userData:{
-                        ...prevAuth.userData,
-                        pots: updatedPots,
-                    }
+        tempErrors.errorName = nameInput.validity.valid? false:true 
+        tempErrors.errorTarget = targetInput.validity.valid? false:true 
+
+        setErrors(tempErrors)
+
+        if(Object.values(tempErrors).every(error => !error)){
+            setAuth(prevAuth => {
+                const updatedPots = [...prevAuth.userData.pots]
+                updatedPots[index] = {
+                    ...updatedPots[index],
+                    name: potName,
+                    target: target,
+                    theme: backgroundStyle,
                 }
-            )
-        })
+    
+                return(
+                    {
+                        ...prevAuth,
+                        userData:{
+                            ...prevAuth.userData,
+                            pots: updatedPots,
+                        }
+                    }
+                )
+            })
+            setDisplayEditWindow(false)
+        }
 
-        setDisplayEditWindow(false)
+
     }    
+
+
+    const potNameRef = React.useRef(undefined)
 
     return(
         <form className="popup-window" onSubmit={handleSave} noValidate>
@@ -124,17 +148,22 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
                     <input 
                     type="text" 
                     placeholder="e.g. Rainy Days" 
-                    className="popup-window-input"
+                    className={`popup-window-input ${errors.errorName? "error-input":""}`}
                     name="name"
                     value={potName}
                     onChange={handlePotNameChange}
                     maxLength={30}
                     required
+                    ref={potNameRef}
                     />
+                    <div className="popup-window-subtext">
+                        {errors.errorName && <p className="text-preset-5 error-text">Please enter the Pot name</p>}
+                        <p className="letters-tracker text-preset-5">{`${potNameRef.current?.value.split("").length || 0} characters left`}</p>
+                    </div>
                 </div>
                 <div className="popup-window-input-div">
                     <label>Target</label>
-                    <div className="popup-window-input-dollar-container">
+                    <div className={`popup-window-input-dollar-container ${errors.errorTarget? "error-input":""}`}>
                         <p>$</p>
                         <input 
                         type="number" 
@@ -146,6 +175,7 @@ export default function EditWindow ( { setDisplayEditWindow, originalName, origi
                         required
                         />
                     </div>
+                    {errors.errorTarget && <p className="text-preset-5 error-text">Please enter a target amount</p>}
                 </div>
                 <div className="window-input-div">
                     <label>Theme</label>

@@ -99,7 +99,7 @@ export default function Transactions () {
         }
 
         return(
-            <div id="transactions-list">
+            <div className="transactions-list">
                 {transactionList}
             </div>
         )
@@ -148,11 +148,11 @@ export default function Transactions () {
 
     return(
         <div className="page-container">
-            <div id="transactions">
+            <div classNameid="transactions">
                 <h1 className="text-preset-1">Transactions</h1>
-                <div id="transactions-container">
-                    <div id="transactions-header">
-                        <div id="transactions-searchbar-container">
+                <div className="transactions-container">
+                    <div className="transactions-header">
+                        <div className="transactions-searchbar-container">
                             <input 
                             type="text"
                             id="transactions-searchbar"
@@ -189,8 +189,8 @@ export default function Transactions () {
                             </div>
                         </div>
                     </div>
-                    <div id="transactions-table" className="text-preset-5">
-                        <div id="transactions-table-header" className="transactions-line">
+                    <div className="transactions-table text-preset-5">
+                        <div className="transactions-table-header transactions-line">
                             <p className="transactions-name">Recipient/Sender</p>
                             <p className="transactions-category">Category</p>
                             <p className="transactions-date">Transaction Date</p>

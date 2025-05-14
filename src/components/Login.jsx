@@ -41,7 +41,6 @@ export default function Login () {
             const password = inputs["login-password"].value
             const oKCredentials = JSON.parse(localStorage.getItem(email))?.password === password
             const userData = JSON.parse(localStorage.getItem(email))?.userData || undefined
-            console.log(userData)
 
 
             if(!Object.values(errorsTracker).every(error => !error)){

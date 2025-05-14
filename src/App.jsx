@@ -9,6 +9,7 @@ import SignUp from './components/SignUp'
 import HomeLayout from './components/HomeLayout'
 import Transactions from './components/Transactions'
 import Pots from './components/Pots'
+import RecurringBills from './components/RecurringBills'
 
 
 
@@ -25,7 +26,7 @@ function App() {
       <Route path="transactions" element={<Transactions/>}/>
       <Route path="budgets" element={<h1>Budgets</h1>}/>
       <Route path="pots" element={<Pots/>}/>
-      <Route path="recurring-bills" element={<h1>Recurring bills</h1>}/>
+      <Route path="bills" element={<RecurringBills/>}/>
     </Route>
   </Routes>
   )
