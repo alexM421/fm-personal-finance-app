@@ -148,7 +148,7 @@ export default function Transactions () {
 
     return(
         <div className="page-container">
-            <div classNameid="transactions">
+            <div className="transactions">
                 <h1 className="text-preset-1">Transactions</h1>
                 <div className="transactions-container">
                     <div className="transactions-header">
