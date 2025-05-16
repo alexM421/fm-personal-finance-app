@@ -1,8 +1,13 @@
 import React from "react";
+import { createPortal } from "react-dom";
 
+
+import CaretRight from "../svg/CaretRight"
 import Ellipsis from "../svg/Ellipsis";
+import BudgetEditWindow from "./BudgetEditWindow";
+import BudgetDeleteWindow from "./BudgetDeleteWindow";
 
-export default function BudgetCard ( { category, max, total, theme, last3transactions} ) {
+export default function BudgetCard ( { category, max, total, theme, relevantTransactions, index} ) {
 
     const [displayOptions, setDisplayOptions] = React.useState(false)
     const [displayEditWindow, setDisplayEditWindow] = React.useState(false)
@@ -23,9 +28,43 @@ export default function BudgetCard ( { category, max, total, theme, last3transac
         }
     },[])
 
-
-
+    //Calculate how much is the color bar filled
     const filledPercent = total>max? "100%":`${((total/max)*100).toFixed(2)}%`
+
+    //handle display of last 3 transactions
+
+    const handleTransactionsDisplay = () => {
+
+        const toReturn = []
+
+        for(let transaction of relevantTransactions){
+
+            const transactionAmount = `$${Math.abs(transaction.amount).toFixed(2)}`
+            const transactionAmountPrefix = transaction.amount <0? "-":""
+
+            toReturn.push(
+                <div className="budget-card-transaction-container">
+                    <div className="budget-card-transaction">
+                        <div className="budget-card-transaction-name">
+                            <img src={transaction.avatar}/>
+                            <p className="text-preset-5-bold">{transaction.name}</p>
+                        </div>
+                        <div className="budget-card-transaction-infos">
+                            <p className="text-preset-5-bold" style={{color: "var(--grey-900)"}}>{transactionAmountPrefix+transactionAmount}</p>
+                            <p className="text-preset-5" style={{color: "var(--grey-500)"}}>{new Date(transaction.date).toLocaleDateString("en-GB")}</p>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            )
+        }
+
+        return (
+            <div className="budget-card-transactions-container">
+                {toReturn}
+            </div>
+        )
+    }
 
     return(
         <div className="budget-card">
@@ -69,9 +108,27 @@ export default function BudgetCard ( { category, max, total, theme, last3transac
                 </div>
             </div>
             <div className="budget-card-latest">
-                <h2 className="text-preset-3">Latest Spending</h2>
-                {/* {last3transactions} */}
+                <div className="budget-card-latest-head">
+                    <h2 className="text-preset-3">Latest Spending</h2>
+                    <div className="see-all-btn">
+                        <p className="text-preset-4">See All</p>
+                        <CaretRight/>
+                    </div>
+                </div>
+                {handleTransactionsDisplay()}
             </div>
-        </div>
+                {displayEditWindow && createPortal(
+                    <div>
+                        <div className="backdrop"></div>
+                        <BudgetEditWindow  setDisplayEditWindow={setDisplayEditWindow} originalCategory={category} originalMax={max} originalTheme={theme} index={index}/>
+                    </div>
+                ,document.body)}
+                {displayDeleteWindow && createPortal(
+                            <div>
+                                <div className="backdrop"></div>
+                                <BudgetDeleteWindow index={index} setDisplayDeleteWindow={setDisplayDeleteWindow} category={category}/>
+                            </div>
+                        ,document.body)}
+    </div>
     )
 }

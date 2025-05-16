@@ -517,6 +517,7 @@ a{
   max-height:  300px ;
   overflow-y: auto;
   scroll-behavior: smooth;
+  z-index: 1000;
 
   /*Hides scrollbar*/
   scrollbar-width: none; /* Firefox */
@@ -1075,16 +1076,19 @@ a{
   border-top-left-radius: 8px;
   border-bottom-left-radius: 8px;
   height: 8px;
+  transition: width ease 0.3s;
 }
 
 .withdraw-bar-filler-gap{
   height: 8px;
+  transition: width ease 0.3s;
 }
 
 .withdraw-bar-filler-new{
   border-top-right-radius: 8px;
   border-bottom-right-radius: 8px;
   height: 8px;
+  transition: width ease 0.3s;
 }
 
 /*Recurring bills*/
@@ -1245,17 +1249,22 @@ a{
   gap: 24px;
 }
 
+.budgets-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .budgets-infographic-container{
   padding: 32px;
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
   gap: 32px;
   background-color: var(--white);
   border-radius: 12px;
   width: 430px;
-  max-height: 600px;
+  align-self: flex-start;
 }
 
 .budgets-infographic-exterior{
@@ -1446,6 +1455,72 @@ a{
   gap: 20px;
 }
 
-.budget-card-latest > h2{
+.budget-card-latest-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-card-latest-head > h2{
   color: var(--grey-900);
+}
+
+.see-all-btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--grey-500);
+}
+
+.see-all-btn > svg{
+  width: 12px;
+  height: 12px;
+}
+
+.budget-card-transactions-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-card-transaction-container:last-of-type > hr{
+  display: none;
+}
+
+.budget-card-transaction-container{
+  display: flex;
+  flex-direction: column;
+}
+
+.budget-card-transaction-container > hr{
+  border: none;
+  border-top: 1px solid var(--grey-500);
+  opacity: 0.15;
+  margin-block: 12px;
+}
+
+.budget-card-transaction{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.budget-card-transaction-name{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--grey-900);
+}
+
+.budget-card-transaction-name > img{
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.budget-card-transaction-infos{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-end;
 }

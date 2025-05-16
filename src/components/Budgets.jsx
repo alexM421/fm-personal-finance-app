@@ -2,42 +2,47 @@ import React from "react";
 
 import { useAuthContext } from "../context/AuthContext"
 import BudgetCard from "./BudgetCard";
+import AddBudget from "./AddBudget"
+
+import { createPortal } from "react-dom"
 
 export default function Budgets () {
 
     const { auth, setAuth } = useAuthContext()
 
-    
+    const [displayAddBudgetWindow, setDisplayAddBudgetWindow] = React.useState(false)
+
     //Get all budgets useful infos
     const budgets = auth.userData.budgets
     const transactions = auth.userData.transactions
+
     const budgetsInformations = []
 
-        for (let budget of budgets){
+    for (let budget of budgets){
 
-            const budgetTransactions = {relevantTransactions: [], total: 0}
-            
-            for(let transaction of transactions){
-                if(transaction.category === budget.category){
-                    budgetTransactions.relevantTransactions.push(transaction)
-                    if(new Date(transaction.date).getMonth()===7){
-                        budgetTransactions.total+= Math.abs(transaction.amount)
-                    }
+        const budgetTransactions = {relevantTransactions: [], total: 0}
+        
+        for(let transaction of transactions){
+            if(transaction.category === budget.category){
+                budgetTransactions.relevantTransactions.push(transaction)
+                if(new Date(transaction.date).getMonth()===7){
+                    budgetTransactions.total+= Math.abs(transaction.amount)
                 }
             }
-           
-            budgetsInformations.push({
-                category: budget.category,
-                theme: budget.theme,
-                max: budget.maximum,
-                ...budgetTransactions
-            })
         }
+        
+        budgetsInformations.push({
+            category: budget.category,
+            theme: budget.theme,
+            max: budget.maximum,
+            ...budgetTransactions
+        })
+    }
 
     //Create color Array for infographic
 
     const budgetsTotal = budgetsInformations.reduce((accumulator, budget) => accumulator+budget.total,0)
-
+    const budgetsMax = budgetsInformations.reduce((accumulator, budget) => accumulator+budget.max,0)
 
     const handleDisplayInfographic = () => {
 
@@ -101,8 +106,8 @@ export default function Budgets () {
                     <div className="budgets-infographic-interior">
                     </div>
                     <div className="budgets-infographic-text">
-                        <p className="text-preset-1" style={{color: "var(--grey-900)"}}>$338</p>
-                        <p className="text-preset-5" style={{color: "var(--grey-500)"}}>of 975$ limit</p>
+                        <p className="text-preset-1" style={{color: "var(--grey-900)"}}>{`$${budgetsTotal}`}</p>
+                        <p className="text-preset-5" style={{color: "var(--grey-500)"}}>{`of ${budgetsMax}$ limit`}</p>
                     </div>
                 </div>
                 <div className="budgets-summary-container">
@@ -122,16 +127,25 @@ export default function Budgets () {
 
         const budgetsCard = []
 
+        let index =0;
+
         for(let budget of budgetsInformations){
+
             budgetsCard.push(
                 <BudgetCard 
                 category={budget.category} 
                 total={budget.total}
                 max={budget.max}
                 theme={budget.theme}
+                relevantTransactions={budget.relevantTransactions.slice(0,3)}
+                index={index}
                 />
             )
+
+            index++
         }
+
+    
 
         return(
             <div className="budgets-list">
@@ -143,11 +157,20 @@ export default function Budgets () {
 
     return(
         <div className="budgets-container">
-            <h1 className="text-preset-1">Budgets</h1>
+            <div className="budgets-header">
+                <h1 className="text-preset-1">Budgets</h1>
+                <button className="new-pot-btn text-preset-4-bold" onClick={() => setDisplayAddBudgetWindow(true)}>+ Add New Budget</button>
+            </div>
             <div className="budgets">
                 {handleDisplayInfographic()}
                 {handleDisplayBudgetList()}
             </div>
+            {displayAddBudgetWindow && createPortal(
+                <div>
+                    <div className="backdrop"></div>
+                    <AddBudget setDisplayAddBudgetWindow={setDisplayAddBudgetWindow}/>
+                </div>
+            ,document.body)}
         </div>
     )
 }
