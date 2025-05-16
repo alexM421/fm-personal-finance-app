@@ -11,6 +11,7 @@ import Transactions from './components/Transactions'
 import Pots from './components/Pots'
 import RecurringBills from './components/RecurringBills'
 import Budgets from './components/Budgets'
+import Overview from './components/Overview'
 
 
 
@@ -23,7 +24,7 @@ function App() {
       <Route path="sign-up" element={<SignUp/>}/>
     </Route>
     <Route path="/home" element={<HomeLayout/>}>
-      <Route path="overview" element={<h1>Overview</h1>}/>
+      <Route path="overview" element={<Overview/>}/>
       <Route path="transactions" element={<Transactions/>}/>
       <Route path="budgets" element={<Budgets/>}/>
       <Route path="pots" element={<Pots/>}/>
