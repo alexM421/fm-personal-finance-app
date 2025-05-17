@@ -335,6 +335,7 @@ input.error-input, .error-input, div.error-input{
   flex-direction: column;
   gap: 4px;
   padding-right: 24px;
+  transition: padding-right ease 0.3s;
 }
 
 .navbar-item{
@@ -345,12 +346,24 @@ input.error-input, .error-input, div.error-input{
   gap: 16px;
   align-items: center;
   transition: color ease 0.3s;
+  border-left: 4px solid transparent;
+  transition: background-color ease 0.3s;
 }
 
 
 .navbar-item:hover, #navbar-btn:hover{
   cursor: pointer;
   color: var(--grey-100);
+}
+
+a.selected-navbar-item{
+  background-color: white;
+  color: var(--grey-900);
+  border-color: var(--green);
+}
+
+a.selected-navbar-item > svg{
+  color: var(--green)
 }
 
 #navbar-btn{
@@ -390,6 +403,14 @@ input.error-input, .error-input, div.error-input{
 .minimized h1 {
   opacity: 0;
 
+}
+
+.minimized #navbar-items{
+  padding-right: 12px;
+}
+
+.minimized #navbar-items .selected-navbar-item svg{
+  color: var(--grey-900);
 }
 
 .minimized > #navbar-logo{
@@ -719,6 +740,11 @@ a{
   align-items: center;
 }
 
+.pots-container{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 24px;
+}
 .new-pot-btn{
   background-color: var(--grey-900);
   color: var(--white);
@@ -1567,6 +1593,7 @@ a{
   display: flex;
   flex-direction: column;
   gap: 24px;
+  flex: 1;
 }
 
 .overview-pane{
@@ -1616,6 +1643,8 @@ a{
   gap: 16px;
   align-items: center;
   height: 110px;
+  min-width: 247px;
+  flex: 1;
 }
 
 .oveview-pots-total > svg{
@@ -1641,6 +1670,7 @@ a{
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  flex: 3;
 }
 
 .overview-box{
@@ -1730,5 +1760,27 @@ a{
 
 .overview-budgets-category > .overview-box{
   height: 43px;
+}
+
+.overview-bills{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.overview-bill{
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 16px;
+  border-radius: 8px;
+  background-color: var(--beige-100);
+}
+
+.overview-bill > p:first-of-type{
+  color: var(--grey-500);
+}
+
+.overview-bill > p:last-of-type{
+  color: var(--grey-900);
 }
 

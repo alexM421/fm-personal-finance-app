@@ -209,10 +209,45 @@ export default function Overview () {
         )
     }
 
+
+    //Useful info for bills
+
+  
+
     const handleDisplayBills = () => {
 
+        
 
         const RecurringBills = auth.userData.transactions.filter(transaction => transaction.recurring)
+            
+        const billsPayment = {
+            paid: {number: 0,total: 0},
+            unpaid: {number: 0,total: 0},
+            dueSoon: {number: 0,total: 0}
+        }
+
+
+        for (let transaction of RecurringBills){ 
+
+            //Check if bill already paid or no
+            const todayDay = new Date().getDate()
+            const targetDay = new Date(transaction.date).getDate()
+        
+            function addBill (path) {
+                path.number++
+                path.total+=Math.abs(transaction.amount)
+            }
+
+            if(targetDay<todayDay){
+                addBill(billsPayment.paid)
+            }else if((targetDay-todayDay)<=7 && targetDay-todayDay>=0){
+                addBill(billsPayment.dueSoon)
+                addBill(billsPayment.unpaid)
+            }else{
+                addBill(billsPayment.unpaid)
+            }
+        }
+
 
         return(
             <>
@@ -223,7 +258,20 @@ export default function Overview () {
                         <CaretRight/>
                     </Link>
                 </div>
-                <div className="overview-bills"></div>
+                <div className="overview-bills">
+                    <div className="overview-bill" style={{boxShadow: "-4px 0px 0px var(--green)"}}>
+                        <p className="text-preset-4">Paid Bills</p>
+                        <p className="text-preset-4-bold">{`$${billsPayment.paid.total.toFixed(2)}`}</p>
+                    </div>
+                    <div className="overview-bill" style={{boxShadow: "-4px 0px 0px var(--yellow)"}}>
+                        <p className="text-preset-4">Total Upcoming</p>
+                        <p className="text-preset-4-bold">{`$${billsPayment.unpaid.total.toFixed(2)}`}</p>
+                    </div>
+                    <div className="overview-bill" style={{boxShadow: "-4px 0px 0px var(--cyan)"}}>
+                        <p className="text-preset-4">Due Soon</p>
+                        <p className="text-preset-4-bold">{`$${billsPayment.dueSoon.total.toFixed(2)}`}</p>
+                    </div>
+                </div>
             </>
         )
     }
@@ -260,7 +308,7 @@ export default function Overview () {
                         {handleDisplayBudgets()}
                     </div>
                     <div className="overview-pane">
-                        {/* {handleDisplayBills()} */}
+                        {handleDisplayBills()}
                     </div>
                 </div>
             </div>

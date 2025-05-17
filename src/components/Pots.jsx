@@ -36,7 +36,9 @@ export default function Pots () {
                 <h1 className="text-preset-1">Pots</h1>
                 <button className="new-pot-btn text-preset-4-bold" onClick={() => setDisplayAddPotWindow(true)}>+ Add New Pot  </button>
             </div>
-            {handlePotsDisplay()}
+            <div className="pots-container">
+                {handlePotsDisplay()}
+            </div>
             {displayAddPotWindow && createPortal(
                             <div>
                                 <div className="backdrop"></div>

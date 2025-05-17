@@ -57,7 +57,7 @@ export default function Login () {
                     userData: userData? userData:DefaultData
                 }
                 )
-                navigate("/home")
+                navigate("/home/overview")
 
             }
     }

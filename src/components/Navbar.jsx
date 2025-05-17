@@ -6,7 +6,7 @@ import NavPots from "../svg/NavPots";
 import NavRecurringBills from "../svg/NavRecurringBills";
 import MinimizeMenu from "../svg/MinimizeMenu";
 import { Link } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 
 export default function Navbar () {
 
@@ -16,27 +16,30 @@ export default function Navbar () {
         setIsMinimized(e.target.checked)
     }
 
+    const location = useLocation()
+    const currentLocation =  location.pathname.split("/").splice(2,1).toString()
+
     return(
         <div className={`navbar ${isMinimized? "minimized":""}`}>
             <img src={`/assets/images/logo-${isMinimized? "small":"large"}.svg`} id="navbar-logo"/>
             <div id="navbar-items">
-                <Link to="overview" className="navbar-item">
+                <Link to="overview" className={`navbar-item ${currentLocation==="overview"? "selected-navbar-item":""}`}>
                     <NavOverview/>
                     <h1 className="text-preset-3">Overview</h1>
                 </Link>
-                <Link to="transactions" className="navbar-item">
+                <Link to="transactions" className={`navbar-item ${currentLocation==="transactions"? "selected-navbar-item":""}`}>
                     <NavTransactions/>
                     <h1 className="text-preset-3">Transactions</h1>
                 </Link>
-                <Link to="budgets" className="navbar-item">
+                <Link to="budgets" className={`navbar-item ${currentLocation==="budgets"? "selected-navbar-item":""}`}>
                     <NavBudgets/>
                     <h1 className="text-preset-3">Budgets</h1>
                 </Link>
-                <Link to="pots" className="navbar-item">
+                <Link to="pots" className={`navbar-item ${currentLocation==="pots"? "selected-navbar-item":""}`}>
                     <NavPots/>
                     <h1 className="text-preset-3">Pots</h1>
                 </Link>
-                <Link to="bills" className="navbar-item">
+                <Link to="bills" className={`navbar-item ${currentLocation==="bills"? "selected-navbar-item":""}`}>
                     <NavRecurringBills/>
                     <h1 className="text-preset-3">Recurring Bills</h1>
                 </Link>
